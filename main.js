@@ -8,12 +8,12 @@ function buildAddOn(e) {
     const subject = msg.getThread().getFirstMessageSubject();
   */
     return [buildCard()];
-  }
+}
 
 function buildCard(responseMessage = '') {
     const createAction = CardService.newAction()
-       //.setFunctionName("createResponseMessage");
-       .setFunctionName("createReplyDraft");
+       .setFunctionName("createResponseMessage"); // ChatGPTが作成した文章をサイドメニューに表示する場合はこちらを利用
+      // .setFunctionName("createReplyDraft");
     const createButton = CardService.newTextButton().setText('ChatGPTで返信内容作成する')
         .setOnClickAction(createAction);
     const section1 = CardService.newCardSection()
@@ -40,7 +40,7 @@ function createResponseMessage(e) {
     const msg = GmailApp.getMessageById(id);
     const responseMessage = chatgpt(msg.getPlainBody())
 
-    var notify = CardService.newNotification().setText('返信案を作成しました。');
+    const notify = CardService.newNotification().setText('返信案を作成しました。');
     return CardService.newActionResponseBuilder()
       .setNotification(notify)
       .setNavigation(CardService.newNavigation().updateCard(buildCard(responseMessage)))
@@ -49,13 +49,13 @@ function createResponseMessage(e) {
 }
 
 function createReplyDraft(e) {
-    var accessToken = e.gmail.accessToken;
+    const accessToken = e.gmail.accessToken;
     GmailApp.setCurrentMessageAccessToken(accessToken);
 
-    var messageId = e.gmail.messageId;
-    var message = GmailApp.getMessageById(messageId);
-    Logger.log(message.getPlainBody());
-    var draft = message.createDraftReply(chatgpt(message.getPlainBody()));
+    const messageId = e.gmail.messageId;
+    const message = GmailApp.getMessageById(messageId);
+    const draftMsg = chatgpt(message.getPlainBody());
+    const draft = message.createDraftReply(draftMsg);
 
     return CardService.newComposeActionResponseBuilder()
       .setGmailDraft(draft).build();
@@ -68,27 +68,28 @@ function chatgpt(mailtext) {
         'Authorization': 'Bearer ' + apiKey
     };
     const messages = [
-        {'role': 'system', 'content': 'あなたは優秀なビジネスマンです。与えられたメールのテキストをもとに返信の内容を生成してください。'},
-        {'role': 'user',   'content': mailtext}
+        {'role': 'system', 'content': 'あなたは優秀なビジネスマンです。与えられたメールに対しての返信メールを作成してください。'},
+        {'role': 'user',   'content': '"""\n' + mailtext + '\n"""'}
     ];
-    var payload = {
+    const payload = {
         "model": "gpt-3.5-turbo-16k",
         "messages": messages,
         "temperature": 0.8
     };
-    var options = {
+    const options = {
         'method': 'POST',
         'headers': headers,
         'payload': JSON.stringify(payload),
         "muteHttpExceptions": true
     };
     try {
-        var response = UrlFetchApp.fetch('https://api.openai.com/v1/chat/completions', options);
+        const response = UrlFetchApp.fetch('https://api.openai.com/v1/chat/completions', options);
+        const data = JSON.parse(response.getContentText());
+        return data.choices[0].message.content;
     } catch (e) {
         Logger.error(e);
+        return "";
     }
-    var data = JSON.parse(response.getContentText());
-    return data.choices[0].message.content;
 }
 
 function test() {
