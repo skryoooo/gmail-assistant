@@ -101,3 +101,8 @@ function test() {
     const a = chatgpt("色々とお手数をおかけ致します。ありがとうございました。");
     console.log(a)
 }
+
+function toyyyymmdd(data) {
+    var dateStr = Utilities.formatDate(date, 'JST', 'yyyyMMdd');
+    return dateStr
+  }
