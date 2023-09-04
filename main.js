@@ -7,6 +7,10 @@ function buildAddOn(e) {
     const msg = GmailApp.getMessageById(id);
     const subject = msg.getThread().getFirstMessageSubject();
   */
+    const accessToken = e.messageMetadata.accessToken;
+    GmailApp.setCurrentMessageAccessToken(accessToken);
+    const id = e.messageMetadata.messageId;
+    
     return [buildCard()];
 }
 
