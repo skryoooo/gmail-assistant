@@ -95,9 +95,3 @@ function chatgpt(mailtext) {
         return "";
     }
 }
-
-function test() {
-    console.log("1");
-    const a = chatgpt("色々とお手数をおかけ致します。ありがとうございました。");
-    console.log(a)
-}
