@@ -12,7 +12,9 @@ jobs:
   pr_agent:
     runs-on: ubuntu-latest
     name: Run PR Agent
-    if: ${{ github.event.sender.type != 'Bot' }} && github.event.label.name == 'pr-agent'
+    if: |
+      ${{ github.event.sender.type != 'Bot' }} 
+      &&  contains(github.event.pull_request.labels.*.name, ''pr-agent'')
     steps:
       - id: pr-agent
         uses: Codium-ai/pr-agent@main
