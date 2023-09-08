@@ -1,8 +1,8 @@
 name: pr-agent
 
 on:
-  issue_comment:
-    types: [created, edited]
+  pull_request:
+    types: [labeled]
 
 permissions:
   pull-requests: write
@@ -12,7 +12,7 @@ jobs:
   pr_agent:
     runs-on: ubuntu-latest
     name: Run PR Agent
-    if: ${{ github.event.sender.type != 'Bot' }}
+    if: ${{ github.event.sender.type != 'Bot' }} && github.event.label.name == 'pr-agent'
     steps:
       - id: pr-agent
         uses: Codium-ai/pr-agent@main
@@ -21,3 +21,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_REVIEWER.EXTRA_INSTRUCTIONS: 'Please use Japanese in descriptions.'
           PR_DESCRIPTION.EXTRA_INSTRUCTIONS: 'Please use Japanese in descriptions. Titles should have prefix of commitlint pattern such as `feat:`, `chore:`, `test:`, `fix:`, `ci:`, `docs:` etc'
+          PR_DESCRIPTION.PUBLISH_DESCRIPTION_AS_COMMENT: true
