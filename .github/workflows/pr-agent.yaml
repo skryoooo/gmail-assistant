@@ -26,5 +26,7 @@ jobs:
           OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_REVIEWER.EXTRA_INSTRUCTIONS: 'Please use Japanese in descriptions.'
-          PR_DESCRIPTION.EXTRA_INSTRUCTIONS: 'Please use Japanese in descriptions. Titles should have prefix of commitlint pattern such as `feat:`, `chore:`, `test:`, `fix:`, `ci:`, `docs:` etc'
-          PR_DESCRIPTION.PUBLISH_DESCRIPTION_AS_COMMENT: true
+          PR_DESCRIPTION.EXTRA_INSTRUCTIONS: 'Please use Japanese in descriptions.'
+          PR_DESCRIPTION.PUBLISH_DESCRIPTION_AS_COMMENT: false
+          PR_DESCRIPTION.ADD_ORIGINAL_USER_DESCRIPTION: true
+          PR_DESCRIPTION.KEEP_ORIGINAL_USER_TITLE: true
