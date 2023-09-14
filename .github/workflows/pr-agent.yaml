@@ -19,6 +19,9 @@ jobs:
         startsWith(github.event.comment.body, '/describe')
         || startsWith(github.event.comment.body, '/review')
         || startsWith(github.event.comment.body, '/improve')
+        || startsWith(github.event.comment.body, '/update_changelog')
+        || startsWith(github.event.comment.body, '/ask')
+        || startsWith(github.event.comment.body, '/similar_issue')
       )
     steps:
       - id: pr-agent
