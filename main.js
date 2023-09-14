@@ -99,5 +99,7 @@ function chatgpt(mailtext) {
 function test() {
     console.log("1");
     const a = chatgpt("色々とお手数をおかけ致します。ありがとうございました。");
-    console.log(a)
+    console.log(a);
+    a = 'こんにちは';
+    console.log(a);
 }
